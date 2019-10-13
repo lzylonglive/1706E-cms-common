@@ -22,8 +22,31 @@ public class StringUtil {
 		}
 	}
 	
+	public static void main(String[] args) {
+		boolean empty = isEmpty("1");
+		System.out.println(empty);
+		boolean hasText = hasText("1");
+		System.out.println(hasText);
+		
+		String randomChar = randomChar(10);
+		System.out.println("随机生成的十个字母："+randomChar);
+		
+		String randomCharAndNumber = randomCharAndNumber(10);
+		System.out.println("随机生成的字符串："+randomCharAndNumber);
+		
+		String fileSuffix = getFileSuffix("关机.vbs");
+		System.out.println("文件后缀名："+fileSuffix);
+		
+		boolean number = isNumber("10.11541");
+		System.out.println("是否是数字："+number);
+		
+		boolean email = isEmail("wasd@qq.com");
+		System.out.println(email);
+		
+	}
+	
 	/**
-	 * 判断原字符串是否没空  空引号也算
+	 * 判断原字符串是否为空  空引号也算
 	 */
 	public static boolean isEmpty(String str) {
 		return (str==null || 0 == str.trim().length());
@@ -78,15 +101,15 @@ public class StringUtil {
 	}
 	
 	/**
-	 * 判断是否为字符串
+	 * 判断是否为数字  包含小数
 	 */
 	public static boolean isNumber(String str) {
-		String reg = "[0-9]+";
+		String reg = "[0-9]+\\.?[0-9]+?";
 		return str.matches(reg);
 	}
 	
 	/**
-	 * 验证代码
+	 * 验证邮箱
 	 */
 	public static boolean isEmail(String str) {
 		String reg = "^[0-9a-zA-Z]+@[0-9a-zA-Z]+\\.[a-z]{2,3}";
@@ -125,4 +148,5 @@ public class StringUtil {
 		
 		return dst;
 	}
+	
 }
