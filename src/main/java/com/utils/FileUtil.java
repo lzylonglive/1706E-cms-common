@@ -111,7 +111,7 @@ public class FileUtil {
 		
 		FileInputStream fis = new FileInputStream(file);
 		
-		InputStreamReader reader = new InputStreamReader(fis);
+		InputStreamReader reader = new InputStreamReader(fis,"utf-8");
 		
 		BufferedReader bufferedReader = new BufferedReader(reader);
 		
