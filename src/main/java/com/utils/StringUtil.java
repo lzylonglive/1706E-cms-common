@@ -104,7 +104,7 @@ public class StringUtil {
 	 * 判断是否为数字  包含小数
 	 */
 	public static boolean isNumber(String str) {
-		String reg = "[0-9]+\\.?[0-9]+?";
+		String reg = "[0-9]+\\.?[0-9]*";
 		return str.matches(reg);
 	}
 	
