@@ -1,5 +1,6 @@
 package com.utils;
 
+import java.text.NumberFormat;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,6 +44,19 @@ public class StringUtil {
 		boolean email = isEmail("wasd@qq.com");
 		System.out.println(email);
 		
+	}
+	
+	/**
+	 * 百分比计算
+	 *
+	 */
+	public static String percent(Integer num,Integer total) {
+		// 创建一个数值格式化对象
+		NumberFormat numberFormat = NumberFormat.getInstance();
+		// 设置精确到小数点后0位   
+		numberFormat.setMaximumFractionDigits(0);
+		String result = numberFormat.format((float)num/(float)total*100);
+		return result;
 	}
 	
 	/**
