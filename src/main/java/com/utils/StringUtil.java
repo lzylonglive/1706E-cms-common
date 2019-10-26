@@ -1,5 +1,7 @@
 package com.utils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.NumberFormat;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -63,14 +65,24 @@ public class StringUtil {
 	 * 判断原字符串是否为空  空引号也算
 	 */
 	public static boolean isEmpty(String str) {
-		return (str==null || 0 == str.trim().length());
+		return (str==null || "".equals(str.trim()));
 	}
 	
 	/**
 	 * 判断原字符串是否有值 空引号也算没值
 	 */
 	public static boolean hasText(String str) {
-		return str != null && 0 < str.trim().length();
+		return (str != null && "".equals(str.trim()));
+	}
+	
+	/**
+	 * 验证全为字母
+	 * @param str
+	 * @return
+	 */
+	public static boolean isLetter(String str) {
+		String pattern = "^[a-zA-Z]+$";
+		return str.matches(pattern);
 	}
 	
 	/**
@@ -122,19 +134,53 @@ public class StringUtil {
 		return str.matches(reg);
 	}
 	
+	//获取n个随机中文字符串
+	public static String getRandonCnStr(int n) {
+		
+		StringBuilder sb = new StringBuilder();
+		for(int i=0;i<n;i++) {
+			sb.append(getOneCn());
+		}
+		return sb.toString();
+		
+	} 
+	
+	/**
+	 * 随机获取一个中文字符
+	 * @return
+	 */
+	private static String getOneCn(){
+		
+		String str = "";
+        int hightPos; //
+        int lowPos;
+        Random random = new Random();
+
+        hightPos = (176 + Math.abs(random.nextInt(39)));
+        lowPos = (161 + Math.abs(random.nextInt(93)));
+
+        byte[] b = new byte[2];
+        b[0] = (Integer.valueOf(hightPos)).byteValue();
+        b[1] = (Integer.valueOf(lowPos)).byteValue();
+
+        try {
+            str = new String(b, "GBK");
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("错误");
+        }
+
+        return str;
+	}
+	
 	/**
 	 * 验证邮箱
 	 */
 	public static boolean isEmail(String str) {
-		String reg = "^[0-9a-zA-Z]+@[0-9a-zA-Z]+\\.[a-z]{2,3}";
-		return str.matches(reg);
-	}
-	
-	public static boolean isEmail2(String str) {
-		String regEx1 = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$"; 
-        Pattern p = Pattern.compile(regEx1);
-        Matcher m = p.matcher(str);
-        return m.find();
+		String reg = "^\\w+@\\w+\\.[a-zA-Z]{2,3}$";
+		Pattern compile = Pattern.compile(reg);
+		Matcher matcher = compile.matcher(str);
+		return matcher.matches();
 	}
 	
 	/**
@@ -161,6 +207,55 @@ public class StringUtil {
 		dst = dst.replace("\r", "<br/>");
 		
 		return dst;
+	}
+	
+	/*
+	* 方法功能：根据正则在字符串提取一段值，用于后面在url地址里提取ID值。
+	* 例如在“http://news.cnstock.com/news,yw-201908-4413224.htm”把“4413224”提取出来。
+	*/
+	public static String getPlaceholderValue(String src, String regex){
+		//TODO 实现代码
+        Pattern pattern = Pattern.compile(regex);// 匹配的模式  
+        Matcher m = pattern.matcher(src);  
+        boolean find = m.find();
+        if(find) {
+        	String group = m.group(0);
+        	 return group.substring(1,group.lastIndexOf('.'));
+        }
+        return "";
+	}
+	
+	//判断Url地址
+	public static boolean isUrl(String str) {
+		 //转换为小写
+       str = str.toLowerCase();
+       String regex = "^((https|http|ftp|rtsp|mms)?://)"  //https、http、ftp、rtsp、mms
+               + "?(([0-9a-z_!~*'().&=+$%-]+: )?[0-9a-z_!~*'().&=+$%-]+@)?" //ftp的user@  
+              + "(([0-9]{1,3}\\.){3}[0-9]{1,3}" // IP形式的URL- 例如：199.194.52.184  
+                + "|" // 允许IP和DOMAIN（域名）
+                + "([0-9a-z_!~*'()-]+\\.)*" // 域名- www.  
+                + "([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\\." // 二级域名  
+               + "[a-z]{2,6})" // first level domain- .com or .museum  
+               + "(:[0-9]{1,5})?" // 端口号最大为65535,5位数
+               + "((/?)|" // a slash isn't required if there is no file name  
+               + "(/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+/?)$";  
+       return  str.matches(regex);
+	}
+	
+	/*
+	* 方法：生成唯一标签名，处理步骤：
+	* 1、全部变成小写；
+	* 2、清空两边的空格，把中间所有的空格替换成“-”；
+	* 3、使用URLEncoder.encode()编码
+	* 最后返回处理的结果。
+	* 举例“Spring MVC”处理后为“spring-mvc”，“Spring Mvc”处理后也为“spring-mvc”
+	*/
+	public static String toUniqueTerm(String term) throws UnsupportedEncodingException{
+	//TODO 实现代码
+		term=term.toLowerCase();
+		term=term.trim();
+		term = term.replaceAll(" ", "-");
+		return URLEncoder.encode(term,"UTF-8");
 	}
 	
 }
