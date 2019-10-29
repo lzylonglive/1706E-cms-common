@@ -250,7 +250,7 @@ public class StringUtil {
 	* 最后返回处理的结果。
 	* 举例“Spring MVC”处理后为“spring-mvc”，“Spring Mvc”处理后也为“spring-mvc”
 	*/
-	public static String toUniqueTerm(String term) throws UnsupportedEncodingException{
+	public static String toUniqueTerm(String term) throws Exception{
 	//TODO 实现代码
 		term=term.toLowerCase();
 		term=term.trim();
